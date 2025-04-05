@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoRide - Smart Bike Rentals & Sales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #22c55e 0%, #3b82f6 100%);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            color: #3b82f6;
+        }
+        
+        .language-switch {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .language-switch:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .rtl {
+            direction: rtl;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Language Switch -->
+    <div class="fixed top-4 right-4 z-50 flex items-center space-x-2 bg-white px-3 py-2 rounded-full shadow-lg">
+        <button id="languageSwitch" class="language-switch flex items-center">
+            <span class="font-medium" id="currentLang">EN</span>
+            <i class="fas fa-exchange-alt ml-2 text-gray-600"></i>
+        </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-bicycle text-3xl text-green-500"></i>
+                        <span class="ml-2 text-xl font-bold text-gray-800">Eco<span class="text-blue-500">Ride</span></span>
+                    </a>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="#home" class="nav-link text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">Home</a>
+                    <a href="#bikes" class="nav-link text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">Bikes</a>
+                    <a href="#accessories" class="nav-link text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">Accessories</a>
+                    <a href="#how-it-works" class="nav-link text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">How It Works</a>
+                    <a href="#faq" class="nav-link text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">FAQ</a>
+                    <a href="#contact" class="nav-link text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">Contact</a>
+                </div>
+                <div class="flex items-center">
+                    <button id="mobile-menu-button" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="hidden md:block ml-4">
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full font-medium transition duration-300">
+                            Sign In
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900">Home</a>
+                <a href="#bikes" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900">Bikes</a>
+                <a href="#accessories" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900">Accessories</a>
+                <a href="#how-it-works" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900">How It Works</a>
+                <a href="#faq" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900">FAQ</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900">Contact</a>
+                <button class="w-full mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full font-medium transition duration-300">
+                    Sign In
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex items-center justify-between">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4" data-en="Ride Green, Ride Smart" data-ar="اركب بذكاء، اركب بأمان">Ride Green, Ride Smart</h1>
+                    <p class="text-xl mb-8" data-en="Eco-friendly bike rentals with smart accessories for your safety and convenience." data-ar="تأجير دراجات صديقة للبيئة مع ملحقات ذكية لسلامتك وراحتك.">Eco-friendly bike rentals with smart accessories for your safety and convenience.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <button class="bg-white text-green-600 hover:bg-gray-100 px-6 py-3 rounded-full font-bold transition duration-300">
+                            <i class="fas fa-bicycle mr-2"></i>
+                            <span data-en="Rent Now" data-ar="استأجر الآن">Rent Now</span>
+                        </button>
+                        <button class="border-2 border-white text-white hover:bg-white hover:text-green-600 px-6 py-3 rounded-full font-bold transition duration-300">
+                            <i class="fas fa-play mr-2"></i>
+                            <span data-en="Watch Demo" data-ar="شاهد العرض">Watch Demo</span>
+                        </button>
+                    </div>
+                    <div class="mt-8 flex items-center">
+                        <div class="flex -space-x-2">
+                            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://randomuser.me/api/portraits/women/12.jpg" alt="">
+                            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
+                            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://randomuser.me/api/portraits/women/45.jpg" alt="">
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm" data-en="Join our 10,000+ happy riders" data-ar="انضم إلى أكثر من 10,000 راكب سعيد">Join our 10,000+ happy riders</p>
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-300"></i>
+                                <span class="ml-1">4.9 (2,345 reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Bike with smart helmet" class="rounded-xl shadow-2xl floating max-w-full h-auto">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4" data-en="Why Choose EcoRide?" data-ar="لماذا تختار إيكو رايد؟">Why Choose EcoRide?</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-en="We combine eco-friendly transportation with cutting-edge technology for your safety and comfort." data-ar="نحن نجمع بين وسائل النقل الصديقة للبيئة وأحدث التقنيات لسلامتك وراحتك.">We combine eco-friendly transportation with cutting-edge technology for your safety and comfort.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card bg-gray-50 p-8 rounded-xl transition duration-300 hover:shadow-lg">
+                    <div class="feature-icon text-green-500 text-4xl mb-4">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Eco-Friendly" data-ar="صديق للبيئة">Eco-Friendly</h3>
+                    <p class="text-gray-600" data-en="Reduce your carbon footprint with our zero-emission bikes and sustainable practices." data-ar="قلل من بصمتك الكربونية مع دراجاتنا عديمة الانبعاثات والممارسات المستدامة.">Reduce your carbon footprint with our zero-emission bikes and sustainable practices.</p>
+                </div>
+                
+                <div class="feature-card bg-gray-50 p-8 rounded-xl transition duration-300 hover:shadow-lg">
+                    <div class="feature-icon text-blue-500 text-4xl mb-4">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Smart Tech" data-ar="تقنية ذكية">Smart Tech</h3>
+                    <p class="text-gray-600" data-en="Our smart helmets feature SOS, GPS, and voice assistance for ultimate safety." data-ar="تحتوي خوذاتنا الذكية على نظام استغاثة ونظام تحديد المواقع ومساعد صوتي لأقصى درجات الأمان.">Our smart helmets feature SOS, GPS, and voice assistance for ultimate safety.</p>
+                </div>
+                
+                <div class="feature-card bg-gray-50 p-8 rounded-xl transition duration-300 hover:shadow-lg">
+                    <div class="feature-icon text-green-500 text-4xl mb-4">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Easy Access" data-ar="وصول سهل">Easy Access</h3>
+                    <p class="text-gray-600" data-en="Multiple pickup and drop-off locations across the city for your convenience." data-ar="مواقع متعددة لالتقاط وإسقاط الدراجات في جميع أنحاء المدينة لراحتك.">Multiple pickup and drop-off locations across the city for your convenience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bikes Section -->
+    <section id="bikes" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4" data-en="Our Bike Collection" data-ar="مجموعة الدراجات لدينا">Our Bike Collection</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-en="Choose from our premium selection of eco-friendly bikes" data-ar="اختر من بين مجموعة الدراجات الصديقة للبيئة الممتازة لدينا">Choose from our premium selection of eco-friendly bikes</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Bike 1 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="City Commuter Bike" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">Popular</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">City Commuter Pro</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="text-gray-600 ml-2">4.7 (128)</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Perfect for daily commuting with comfortable seating and smooth ride.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold">$29<span class="text-sm text-gray-500">/day</span></span>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition duration-300">
+                                <i class="fas fa-shopping-cart mr-1"></i> Rent Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bike 2 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Mountain Explorer Bike" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Mountain Explorer</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="text-gray-600 ml-2">5.0 (86)</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Built for rugged terrain with advanced suspension and durable frame.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold">$39<span class="text-sm text-gray-500">/day</span></span>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition duration-300">
+                                <i class="fas fa-shopping-cart mr-1"></i> Rent Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bike 3 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1576435728678-68d937d47e8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Electric Cruiser Bike" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">New</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Electric Cruiser</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span class="text-gray-600 ml-2">4.2 (64)</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Effortless riding with electric assist and long battery life.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold">$49<span class="text-sm text-gray-500">/day</span></span>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium transition duration-300">
+                                <i class="fas fa-shopping-cart mr-1"></i> Rent Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white px-6 py-3 rounded-full font-bold transition duration-300">
+                    <span data-en="View All Bikes" data-ar="عرض جميع الدراجات">View All Bikes</span>
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Accessories Section -->
+    <section id="accessories" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4" data-en="Smart Accessories" data-ar="الملحقات الذكية">Smart Accessories</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-en="Enhance your ride with our innovative safety and convenience accessories" data-ar="عزز رحلتك مع ملحقات الأمان والراحة المبتكرة لدينا">Enhance your ride with our innovative safety and convenience accessories</p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <!-- Smart Helmet -->
+                <div class="product-card bg-gray-50 p-6 rounded-xl transition duration-300 hover:shadow-lg">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1627855437693-dcc7b0c4ba8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Smart Helmet" class="h-40 object-contain">
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">ProTech Smart Helmet</h3>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">SOS</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">GPS</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Bluetooth</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">AI Voice</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Advanced protection with built-in navigation and emergency features.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold">$129</span>
+                        <button class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition duration-300">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Bike Light -->
+                <div class="product-card bg-gray-50 p-6 rounded-xl transition duration-300 hover:shadow-lg">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1593764592116-bfb2a97c642a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Bike Light" class="h-40 object-contain">
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Solar Bike Light</h3>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Solar</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">USB-C</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">300 Lumens</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Bright, rechargeable light with multiple modes for visibility.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold">$29</span>
+                        <button class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition duration-300">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Repair Kit -->
+                <div class="product-card bg-gray-50 p-6 rounded-xl transition duration-300 hover:shadow-lg">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Repair Kit" class="h-40 object-contain">
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Roadside Repair Kit</h3>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Compact</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Essential Tools</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Patch Kit</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Everything you need for quick repairs on the go.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold">$24</span>
+                        <button class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition duration-300">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Bike Lock -->
+                <div class="product-card bg-gray-50 p-6 rounded-xl transition duration-300 hover:shadow-lg">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1584917862478-0f7493ec9d0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Bike Lock" class="h-40 object-contain">
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Smart U-Lock</h3>
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Alarm</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">GPS Tracking</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">App Control</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Theft-proof lock with tracking and alarm features.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold">$59</span>
+                        <button class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition duration-300">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4" data-en="How It Works" data-ar="كيف يعمل">How It Works</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-en="Renting a bike has never been easier with our simple 3-step process" data-ar="لم يكن استئجار دراجة أسهل من أي وقت مضى مع عملية الخطوات الثلاث البسيطة لدينا">Renting a bike has never been easier with our simple 3-step process</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="text-center">
+                    <div class="bg-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <span class="text-3xl font-bold text-green-500">1</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Find & Reserve" data-ar="ابحث واحجز">Find & Reserve</h3>
+                    <p class="text-gray-600" data-en="Browse our app or website to find available bikes near you and reserve your ride." data-ar="تصفح تطبيقنا أو موقعنا للعثور على الدراجات المتاحة بالقرب منك وحجز رحلتك.">Browse our app or website to find available bikes near you and reserve your ride.</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="text-center">
+                    <div class="bg-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <span class="text-3xl font-bold text-blue-500">2</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Unlock & Ride" data-ar="افتح واركب">Unlock & Ride</h3>
+                    <p class="text-gray-600" data-en="Use your phone to unlock the bike at the designated station and start your journey." data-ar="استخدم هاتفك لفتح الدراجة في المحطة المخصصة وابدأ رحلتك.">Use your phone to unlock the bike at the designated station and start your journey.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="text-center">
+                    <div class="bg-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <span class="text-3xl font-bold text-green-500">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3" data-en="Return & Pay" data-ar="ارجع وادفع">Return & Pay</h3>
+                    <p class="text-gray-600" data-en="Return the bike to any station and your payment will be processed automatically." data-ar="ارجع الدراجة إلى أي محطة وسيتم معالجة دفعتك تلقائيًا.">Return the bike to any station and your payment will be processed automatically.</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-1/2 p-8 md:p-12">
+                        <h3 class="text-2xl font-bold mb-4" data-en="Download Our App" data-ar="حمل تطبيقنا">Download Our App</h3>
+                        <p class="text-gray-600 mb-6" data-en="Get the full EcoRide experience with our mobile app featuring bike locations, ride history, and exclusive offers." data-ar="احصل على تجربة EcoRide الكاملة مع تطبيقنا للجوال الذي يتضمن مواقع الدراجات وسجل الرحلات والعروض الحصرية.">Get the full EcoRide experience with our mobile app featuring bike locations, ride history, and exclusive offers.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center transition duration-300">
+                                <i class="fab fa-apple text-2xl mr-2"></i>
+                                <div class="text-left">
+                                    <div class="text-xs">Download on the</div>
+                                    <div class="font-bold">App Store</div>
+                                </div>
+                            </button>
+                            <button class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center transition duration-300">
+                                <i class="fab fa-google-play text-2xl mr-2"></i>
+                                <div class="text-left">
+                                    <div class="text-xs">Get it on</div>
+                                    <div class="font-bold">Google Play</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 bg-gray-100 flex items-center justify-center p-8">
+                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Mobile App Screens" class="max-w-xs">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4" data-en="Frequently Asked Questions" data-ar="أسئلة مكررة">Frequently Asked Questions</h2>
+                <p class="text-lg text-gray-600" data-en="Find answers to common questions about our bike rental service" data-ar="ابحث عن إجابات للأسئلة الشائعة حول خدمة تأجير الدراجات لدينا">Find answers to common questions about our bike rental service</p>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition duration-300">
+                        <span class="text-lg font-medium" data-en="How do I rent a bike?" data-ar="كيف يمكنني استئجار دراجة؟">How do I rent a bike?</span>
+                        <i class="fas fa-chevron-down transition duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 pt-0">
+                        <p class="text-gray-600" data-en="Renting a bike is simple! Download our app, create an account, find a bike near you using the map, scan the QR code to unlock, and you're ready to ride. Return the bike to any designated station when you're done." data-ar="استئجار دراجة أمر بسيط! قم بتنزيل تطبيقنا ، وإنشاء حساب ، والعثور على دراجة بالقرب منك باستخدام الخريطة ، ومسح رمز الاستجابة السريعة لفتحه ، وأنت على استعداد للركوب. ارجع الدراجة إلى أي محطة مخصصة عند الانتهاء.">Renting a bike is simple! Download our app, create an account, find a bike near you using the map, scan the QR code to unlock, and you're ready to ride. Return the bike to any designated station when you're done.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition duration-300">
+                        <span class="text-lg font-medium" data-en="What are your pricing options?" data-ar="ما هي خيارات التسعير الخاصة بك؟">What are your pricing options?</span>
+                        <i class="fas fa-chevron-down transition duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 pt-0">
+                        <p class="text-gray-600" data-en="We offer flexible pricing: Pay-as-you-go at $1 to unlock + $0.15 per minute, or choose our value packs like the Day Pass for $15 (unlimited 30-minute rides for 24 hours). Monthly subscriptions start at $25/month." data-ar="نحن نقدم تسعيرًا مرنًا: الدفع عند الاستخدام بسعر 1 دولار للفتح + 0.15 دولارًا لكل دقيقة ، أو اختر باقات القيمة الخاصة بنا مثل Day Pass مقابل 15 دولارًا (رحلات غير محدودة لمدة 30 دقيقة لمدة 24 ساعة). تبدأ الاشتراكات الشهرية من 25 دولارًا / شهر.">We offer flexible pricing: Pay-as-you-go at $1 to unlock + $0.15 per minute, or choose our value packs like the Day Pass for $15 (unlimited 30-minute rides for 24 hours). Monthly subscriptions start at $25/month.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition duration-300">
+                        <span class="text-lg font-medium" data-en="Are helmets provided?" data-ar="هل يتم توفير الخوذات؟">Are helmets provided?</span>
+                        <i class="fas fa-chevron-down transition duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 pt-0">
+                        <p class="text-gray-600" data-en="Yes! We provide free standard helmets at all our stations. You can also rent our premium Smart Helmets with advanced safety features for just $5 per ride." data-ar="نعم! نحن نقدم خوذات قياسية مجانية في جميع محطاتنا. يمكنك أيضًا استئجار خوذاتنا الذكية المتميزة مع ميزات الأمان المتقدمة مقابل 5 دولارات فقط لكل رحلة.">Yes! We provide free standard helmets at all our stations. You can also rent our premium Smart Helmets with advanced safety features for just $5 per ride.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition duration-300">
+                        <span class="text-lg font-medium" data-en="How does the smart helmet work?" data-ar="كيف تعمل الخوذة الذكية؟">How does the smart helmet work?</span>
+                        <i class="fas fa-chevron-down transition duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 pt-0">
+                        <p class="text-gray-600" data-en="Our Smart Helmets connect to your phone via Bluetooth. They feature built-in GPS navigation with turn-by-turn directions through bone conduction audio, an SOS button that alerts emergency contacts if you fall, and an AI voice assistant to help with directions and ride information." data-ar="تتصل خوذاتنا الذكية بهاتفك عبر البلوتوث. وهي تتميز بنظام تحديد المواقع المدمج مع اتجاهات خطوة بخطوة من خلال الصوت التوصيل العظمي ، وزر SOS ينبه جهات الاتصال في حالات الطوارئ إذا سقطت ، ومساعد صوتي بالذكاء الاصطناعي لمساعدتك في الاتجاهات ومعلومات الرحلة.">Our Smart Helmets connect to your phone via Bluetooth. They feature built-in GPS navigation with turn-by-turn directions through bone conduction audio, an SOS button that alerts emergency contacts if you fall, and an AI voice assistant to help with directions and ride information.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 transition duration-300">
+                        <span class="text-lg font-medium" data-en="What if I have a problem during my ride?" data-ar="ماذا لو واجهت مشكلة أثناء رحلتي؟">What if I have a problem during my ride?</span>
+                        <i class="fas fa-chevron-down transition duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 pt-0">
+                        <p class="text-gray-600" data-en="For immediate assistance, press the SOS button on our Smart Helmet or call our 24/7 support line at 1-800-ECO-RIDE. For non-emergencies, use the Help section in our app to report issues or request a replacement bike." data-ar="للحصول على مساعدة فورية ، اضغط على زر SOS الموجود على خوذتنا الذكية أو اتصل بخط الدعم على مدار الساعة طوال أيام الأسبوع على الرقم 1-800-ECO-RIDE. بالنسبة للحالات غير الطارئة ، استخدم قسم المساعدة في تطبيقنا للإبلاغ عن المشكلات أو طلب استبدال الدراجة.">For immediate assistance, press the SOS button on our Smart Helmet or call our 24/7 support line at 1-800-ECO-RIDE. For non-emergencies, use the Help section in our app to report issues or request a replacement bike.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto" data-en="Have questions or feedback? We'd love to hear from you!" data-ar="هل لديك أسئلة أو ملاحظات؟ نحن نحب أن نسمع منك!">Have questions or feedback? We'd love to hear from you!</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-6" data-en="Send us a message" data-ar="أرسل لنا رسالة">Send us a message</h3>
+                    <form>
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-700 mb-2" data-en="Your Name" data-ar="اسمك">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-gray-700 mb-2" data-en="Email Address" data-ar="عنوان البريد الإلكتروني">Email Address</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div class="mb-4">
+                            <label for="subject" class="block text-gray-700 mb-2" data-en="Subject" data-ar="الموضوع">Subject</label>
+                            <select id="subject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="" data-en="Select a subject" data-ar="اختر موضوع">Select a subject</option>
+                                <option value="rental" data-en="Bike Rental Question" data-ar="سؤال حول تأجير الدراجات">Bike Rental Question</option>
+                                <option value="purchase" data-en="Bike Purchase Inquiry" data-ar="استفسار عن شراء الدراجة">Bike Purchase Inquiry</option>
+                                <option value="technical" data-en="Technical Support" data-ar="الدعم الفني">Technical Support</option>
+                                <option value="feedback" data-en="Feedback/Suggestion" data-ar="ملاحظات / اقتراح">Feedback/Suggestion</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="message" class="block text-gray-700 mb-2" data-en="Your Message" data-ar="رسالتك">Your Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-bold transition duration-300">
+                            <span data-en="Send Message" data-ar="إرسال الرسالة">Send Message</span>
+                        </button>
+                    </form>
+                </div>
+                
+                <div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg mb-8">
+                        <h3 class="text-xl font-bold mb-6" data-en="Contact Information" data-ar="معلومات الاتصال">Contact Information</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                    <i class="fas fa-map-marker-alt text-blue-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium" data-en="Our Location" data-ar="موقعنا">Our Location</h4>
+                                    <p class="text-gray-600" data-en="123 Green Street, Eco City" data-ar="123 شارع جرين، مدينة إيكو">123 Green Street, Eco City</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                    <i class="fas fa-phone-alt text-blue-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium" data-en="Phone Number" data-ar="رقم الهاتف">Phone Number</h4>
+                                    <p class="text-gray-600">+1 (800) ECO-RIDE</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                    <i class="fas fa-envelope text-blue-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium" data-en="Email Address" data-ar="عنوان البريد الإلكتروني">Email Address</h4>
+                                    <p class="text-gray-600">support@ecoride.com</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                    <i class="fas fa-clock text-blue-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium" data-en="Working Hours" data-ar="ساعات العمل">Working Hours</h4>
+                                    <p class="text-gray-600" data-en="24/7 Customer Support" data-ar="دعم العملاء على مدار الساعة">24/7 Customer Support</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-6" data-en="Follow Us" data-ar="تابعنا">Follow Us</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="bg-blue-100 hover:bg-blue-200 w-12 h-12 rounded-full flex items-center justify-center transition duration-300">
+                                <i class="fab fa-facebook-f text-blue-600"></i>
+                            </a>
+                            <a href="#" class="bg-blue-100 hover:bg-blue-200 w-12 h-12 rounded-full flex items-center justify-center transition duration-300">
+                                <i class="fab fa-twitter text-blue-400"></i>
+                            </a>
+                            <a href="#" class="bg-blue-100 hover:bg-blue-200 w-12 h-12 rounded-full flex items-center justify-center transition duration-300">
+                                <i class="fab fa-instagram text-pink-600"></i>
+                            </a>
+                            <a href="#" class="bg-blue-100 hover:bg-blue-200 w-12 h-12 rounded-full flex items-center justify-center transition duration-300">
+                                <i class="fab fa-linkedin-in text-blue-700"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-green-500 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-4" data-en="Stay Updated" data-ar="ابق على اطلاع">Stay Updated</h2>
+            <p class="text-lg mb-8" data-en="Subscribe to our newsletter for exclusive offers and bike tips" data-ar="اشترك في نشرتنا الإخبارية للحصول على عروض حصرية ونصائح حول الدراجات">Subscribe to our newsletter for exclusive offers and bike tips</p>
+            
+            <form class="max-w-md mx-auto flex">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-l-lg focus:outline-none text-gray-900" data-en="Your email address" data-ar="عنوان بريدك الإلكتروني">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-r-lg font-bold transition duration-300">
+                    <span data-en="Subscribe" data-ar="اشترك">Subscribe</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <a href="#" class="flex items-center mb-6">
+                        <i class="fas fa-bicycle text-3xl text-green-500"></i>
+                        <span class="ml-2 text-xl font-bold">Eco<span class="text-blue-500">Ride</span></span>
+                    </a>
+                    <p class="text-gray-400 mb-4" data-en="Eco-friendly bike rentals with smart technology for your safety and convenience." data-ar="تأجير دراجات صديقة للبيئة مع تقنية ذكية لسلامتك وراحتك.">Eco-friendly bike rentals with smart technology for your safety and convenience.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-apple text-2xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-google-play text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6" data-en="Quick Links" data-ar="روابط سريعة">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition duration-300" data-en="Home" data-ar="الرئيسية">Home</a></li>
+                        <li><a href="#bikes" class="text-gray-400 hover:text-white transition duration-300" data-en="Bikes" data-ar="الدراجات">Bikes</a></li>
+                        <li><a href="#accessories" class="text-gray-400 hover:text-white transition duration-300" data-en="Accessories" data-ar="الملحقات">Accessories</a></li>
+                        <li><a href="#how-it-works" class="text-gray-400 hover:text-white transition duration-300" data-en="How It Works" data-ar="كيف يعمل">How It Works</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white transition duration-300" data-en="FAQ" data-ar="الأسئلة الشائعة">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6" data-en="Support" data-ar="الدعم">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300" data-en="Help Center" data-ar="مركز المساعدة">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300" data-en="Terms of Service" data-ar="شروط الخدمة">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300" data-en="Privacy Policy" data-ar="سياسة الخصوصية">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300" data-en="Refund Policy" data-ar="سياسة الاسترداد">Refund Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6" data-en="Locations" data-ar="المواقع">Locations</h3>
+                    <ul class="space-y-3">
+                        <li class="text-gray-400" data-en="Downtown Station" data-ar="محطة وسط المدينة">Downtown Station</li>
+                        <li class="text-gray-400" data-en="Green Park Hub" data-ar="مركز جرين بارك">Green Park Hub</li>
+                        <li class="text-gray-400" data-en="University Campus" data-ar="الحرم الجامعي">University Campus</li>
+                        <li class="text-gray-400" data-en="Beachfront Rental" data-ar="تأجير الواجهة البحرية">Beachfront Rental</li>
+                        <li class="text-gray-400" data-en="Central Mall" data-ar="المول المركزي">Central Mall</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0" data-en="© 2023 EcoRide. All rights reserved." data-ar="© 2023 إيكو رايد. كل الحقوق محفوظة.">© 2023 EcoRide. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // FAQ toggle
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('i');
+                
+                content.classList.toggle('hidden');
+                icon.classList.toggle('fa-chevron-down');
+                icon.classList.toggle('fa-chevron-up');
+            });
+        });
+
+        // Language switch functionality
+        document.getElementById('languageSwitch').addEventListener('click', function() {
+            const currentLang = document.getElementById('currentLang').textContent;
+            const newLang = currentLang === 'EN' ? 'AR' : 'EN';
+            document.getElementById('currentLang').textContent = newLang;
+            
+            // Toggle RTL for Arabic
+            document.body.classList.toggle('rtl');
+            
+            // Update all elements with data-en and data-ar attributes
+            document.querySelectorAll('[data-en], [data-ar]').forEach(element => {
+                if (element.hasAttribute('placeholder')) {
+                    const placeholderText = newLang === 'EN' ? element.getAttribute('data-en') : element.getAttribute('data-ar');
+                    element.setAttribute('placeholder', placeholderText);
+                } else {
+                    const text = newLang === 'EN' ? element.getAttribute('data-en') : element.getAttribute('data-ar');
+                    element.textContent = text;
+                }
+            });
+            
+            // Update select options
+            document.querySelectorAll('option').forEach(option => {
+                if (option.hasAttribute('data-en') && option.hasAttribute('data-ar')) {
+                    const text = newLang === 'EN' ? option.getAttribute('data-en') : option.getAttribute('data-ar');
+                    option.textContent = text;
+                }
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
